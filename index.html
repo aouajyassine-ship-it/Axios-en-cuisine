@@ -1,0 +1,563 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Axios en Cuisine - Découvrez, recherchez et partagez vos meilleures recettes.">
+
+    <title>Axios en Cuisine | Le carnet de recettes</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#315C45",
+                        secondary: "#E99A52",
+                        cream: "#FAF8F3",
+                        dark: "#252D26",
+                        muted: "#858C82",
+                        soft: "#EEF2EB"
+                    },
+                    fontFamily: {
+                        sans: ["DM Sans", "sans-serif"],
+                        display: ["Playfair Display", "serif"]
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: #FAF8F3;
+        }
+
+        .recipe-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 18px 35px rgba(37, 45, 38, 0.09);
+        }
+
+        .hero-pattern {
+            background-image: radial-gradient(#315C45 0.7px, transparent 0.7px);
+            background-size: 20px 20px;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #315C45;
+            box-shadow: 0 0 0 3px rgba(49, 92, 69, 0.10);
+        }
+    </style>
+</head>
+
+<body class="font-sans text-dark">
+
+    <!-- ================= NAVBAR ================= -->
+    <header class="sticky top-0 z-50 bg-cream/95 backdrop-blur-md border-b border-[#EAE8E0]">
+        <nav class="max-w-7xl mx-auto px-5 lg:px-8 h-20 flex items-center justify-between">
+
+            <!-- Logo -->
+            <a href="#" class="flex items-center gap-3">
+                <div class="w-11 h-11 bg-primary rounded-2xl flex items-center justify-center text-2xl">
+                    🍃
+                </div>
+
+                <div>
+                    <h1 class="font-display text-xl font-bold text-primary leading-tight">
+                        Axios<span class="text-secondary">.</span>
+                    </h1>
+                    <p class="text-[10px] tracking-[2px] uppercase text-muted font-bold">
+                        En Cuisine
+                    </p>
+                </div>
+            </a>
+
+            <!-- Navigation -->
+            <div class="hidden md:flex items-center gap-9 text-sm font-semibold text-gray-600">
+                <a href="#accueil" class="hover:text-primary transition">Accueil</a>
+                <a href="#recettes" class="hover:text-primary transition">Recettes</a>
+                <a href="#ajouter" class="hover:text-primary transition">Partager une recette</a>
+            </div>
+
+            <!-- Button -->
+            <a href="#ajouter"
+               class="bg-primary hover:bg-[#254833] text-white px-5 py-3 rounded-full text-sm font-semibold transition flex items-center gap-2">
+                <span>+</span>
+                <span class="hidden sm:inline">Proposer une recette</span>
+                <span class="sm:hidden">Ajouter</span>
+            </a>
+        </nav>
+    </header>
+
+
+    <main>
+
+        <!-- ================= HERO ================= -->
+        <section id="accueil" class="relative overflow-hidden">
+
+            <div class="max-w-7xl mx-auto px-5 lg:px-8 py-16 lg:py-24">
+
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+
+                    <!-- Hero Text -->
+                    <div class="relative z-10">
+
+                        <div class="inline-flex items-center gap-2 bg-[#EEF2EB] text-primary px-4 py-2 rounded-full text-xs font-bold mb-7">
+                            <span class="w-2 h-2 rounded-full bg-secondary"></span>
+                            LE CARNET DU CLUB CUISINE
+                        </div>
+
+                        <h2 class="font-display text-5xl sm:text-6xl lg:text-[68px] leading-[1.12] font-bold mb-6">
+                            La cuisine,
+                            <span class="text-primary italic">un plaisir</span>
+                            à partager.
+                        </h2>
+
+                        <p class="text-muted text-base sm:text-lg leading-8 max-w-lg mb-9">
+                            Découvrez de nouvelles saveurs, trouvez l'inspiration
+                            et partagez vos recettes préférées avec toute la communauté.
+                        </p>
+
+                        <div class="flex flex-wrap gap-4">
+                            <a href="#recettes"
+                               class="bg-primary hover:bg-[#254833] text-white px-7 py-4 rounded-full font-bold text-sm transition shadow-lg shadow-primary/15">
+                                Explorer les recettes →
+                            </a>
+
+                            <a href="#ajouter"
+                               class="border border-gray-200 hover:border-primary text-dark px-7 py-4 rounded-full font-bold text-sm transition">
+                                + Partager une idée
+                            </a>
+                        </div>
+
+                        <!-- Stats -->
+                        <div class="flex items-center gap-8 mt-12 pt-8 border-t border-gray-200 max-w-md">
+
+                            <div>
+                                <p class="text-3xl font-display font-bold text-primary" id="hero-count">12+</p>
+                                <p class="text-xs text-muted mt-1">Recettes disponibles</p>
+                            </div>
+
+                            <div class="w-px h-10 bg-gray-200"></div>
+
+                            <div>
+                                <p class="text-3xl font-display font-bold text-primary">100%</p>
+                                <p class="text-xs text-muted mt-1">Passion cuisine</p>
+                            </div>
+
+                            <div class="w-px h-10 bg-gray-200"></div>
+
+                            <div>
+                                <p class="text-3xl font-display font-bold text-primary">♥</p>
+                                <p class="text-xs text-muted mt-1">Fait avec amour</p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Hero Image -->
+                    <div class="relative">
+
+                        <div class="absolute -top-8 -right-5 w-40 h-40 bg-secondary/10 rounded-full blur-2xl"></div>
+
+                        <div class="relative rounded-[35px] overflow-hidden h-[380px] sm:h-[480px] shadow-2xl">
+                            <img
+                                src="https://images.unsplash.com/photo-1547592180-85f173990554?w=1000"
+                                alt="Un délicieux plat préparé avec des ingrédients frais"
+                                class="w-full h-full object-cover"
+                            >
+
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+
+                            <div class="absolute bottom-7 left-7 right-7 text-white">
+                                <span class="bg-secondary px-3 py-1.5 rounded-full text-xs font-bold">
+                                    ✨ Inspiration du jour
+                                </span>
+
+                                <h3 class="font-display text-3xl font-bold mt-4">
+                                    Le goût des bonnes choses.
+                                </h3>
+                            </div>
+                        </div>
+
+                        <div class="absolute -bottom-6 -left-5 bg-white rounded-2xl shadow-xl p-4 flex items-center gap-3">
+                            <div class="w-12 h-12 bg-[#EEF2EB] rounded-xl flex items-center justify-center text-2xl">
+                                👨‍🍳
+                            </div>
+                            <div>
+                                <p class="font-bold text-sm">Cuisinons ensemble</p>
+                                <p class="text-xs text-muted">Une communauté passionnée</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= RECIPES ================= -->
+        <section id="recettes" class="py-20 bg-white">
+
+            <div class="max-w-7xl mx-auto px-5 lg:px-8">
+
+                <!-- Section Heading -->
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-5 mb-10">
+
+                    <div>
+                        <p class="text-secondary font-bold text-xs tracking-[3px] uppercase mb-3">
+                            À DÉCOUVRIR
+                        </p>
+
+                        <h2 class="font-display text-4xl sm:text-5xl font-bold">
+                            Nos recettes
+                            <span class="text-primary italic">du moment.</span>
+                        </h2>
+
+                        <p class="text-muted mt-3">
+                            Trouvez votre prochaine inspiration culinaire.
+                        </p>
+                    </div>
+
+                    <div class="bg-soft text-primary px-5 py-3 rounded-xl text-sm font-bold">
+                        <span id="recipe-count">12</span> recettes disponibles
+                    </div>
+
+                </div>
+
+
+                <!-- Search -->
+                <div class="flex flex-col sm:flex-row gap-3 mb-10">
+
+                    <div class="relative flex-1">
+
+                        <span class="absolute left-5 top-1/2 -translate-y-1/2 text-muted text-xl">
+                            ⌕
+                        </span>
+
+                        <input
+                            type="search"
+                            id="search-input"
+                            placeholder="Rechercher une recette, un ingrédient..."
+                            class="w-full bg-cream border border-gray-200 rounded-2xl py-4 pl-14 pr-5 text-sm"
+                        >
+                    </div>
+
+                    <button
+                        id="search-btn"
+                        type="button"
+                        class="bg-primary hover:bg-[#254833] text-white px-8 py-4 rounded-2xl font-bold text-sm transition">
+                        Rechercher
+                    </button>
+
+                </div>
+
+
+                <!-- Loading State -->
+                <div id="loading" class="hidden text-center py-16">
+                    <div class="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin mx-auto"></div>
+                    <p class="text-muted mt-5 font-semibold">Chargement des recettes...</p>
+                </div>
+
+
+                <!-- Error State -->
+                <div id="error-state" class="hidden text-center py-14 bg-red-50 rounded-3xl border border-red-100">
+                    <div class="text-4xl mb-4">⚠️</div>
+                    <h3 id="error-message" class="font-bold text-lg text-red-700">
+                        Une erreur est survenue.
+                    </h3>
+                    <p class="text-sm text-red-500 mt-2">
+                        Vérifiez votre connexion puis réessayez.
+                    </p>
+                    <button id="retry-btn" type="button"
+                        class="mt-5 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-full text-sm font-bold">
+                        Réessayer
+                    </button>
+                </div>
+
+
+                <!-- Empty State -->
+                <div id="empty-state" class="hidden text-center py-16">
+                    <div class="text-5xl mb-4">🍽️</div>
+                    <h3 class="font-display text-2xl font-bold">
+                        Aucune recette trouvée
+                    </h3>
+                    <p class="text-muted mt-2">
+                        Essayez avec un autre mot-clé.
+                    </p>
+                    <button id="show-all-btn" type="button"
+                        class="mt-5 text-primary font-bold hover:underline">
+                        Voir toutes les recettes →
+                    </button>
+                </div>
+
+
+                <!-- Recipes Container -->
+                <div id="recipes-container"
+                     class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+
+                    <!-- Les cartes seront ajoutées ici avec JavaScript -->
+
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ================= ADD RECIPE ================= -->
+        <section id="ajouter" class="py-20">
+
+            <div class="max-w-7xl mx-auto px-5 lg:px-8">
+
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+
+                    <!-- Left Content -->
+                    <div>
+
+                        <p class="text-secondary font-bold text-xs tracking-[3px] uppercase mb-4">
+                            À VOUS DE JOUER
+                        </p>
+
+                        <h2 class="font-display text-4xl sm:text-5xl font-bold leading-tight">
+                            Votre recette mérite
+                            <span class="text-primary italic">d'être partagée.</span>
+                        </h2>
+
+                        <p class="text-muted leading-8 mt-6 max-w-md">
+                            Vous avez une recette spéciale ?
+                            Partagez-la avec les membres du club et enrichissez
+                            notre carnet de cuisine.
+                        </p>
+
+                        <div class="mt-9 space-y-5">
+
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-[#EEF2EB] rounded-2xl flex items-center justify-center text-xl">
+                                    🥗
+                                </div>
+                                <div>
+                                    <p class="font-bold">Partagez vos créations</p>
+                                    <p class="text-sm text-muted">Faites découvrir vos plats préférés.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-[#FFF0E3] rounded-2xl flex items-center justify-center text-xl">
+                                    ❤️
+                                </div>
+                                <div>
+                                    <p class="font-bold">Inspirez la communauté</p>
+                                    <p class="text-sm text-muted">Chaque recette a son histoire.</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <!-- Form -->
+                    <div class="bg-white rounded-[30px] p-6 sm:p-9 shadow-xl shadow-gray-200/50 border border-gray-100">
+
+                        <div class="mb-7">
+                            <h3 class="font-display text-2xl font-bold">
+                                Nouvelle recette
+                            </h3>
+                            <p class="text-muted text-sm mt-2">
+                                Remplissez les informations ci-dessous.
+                            </p>
+                        </div>
+
+                        <form id="recipe-form" novalidate>
+
+                            <!-- Recipe Name -->
+                            <div class="mb-5">
+                                <label for="recipe-name" class="block text-sm font-bold mb-2">
+                                    Nom de la recette *
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="recipe-name"
+                                    name="name"
+                                    placeholder="Ex : Poulet aux légumes"
+                                    class="w-full border border-gray-200 rounded-xl px-4 py-3.5 text-sm"
+                                >
+
+                                <p id="name-error" class="text-red-500 text-xs mt-2"></p>
+                            </div>
+
+
+                            <!-- Cuisine -->
+                            <div class="mb-5">
+                                <label for="recipe-cuisine" class="block text-sm font-bold mb-2">
+                                    Type de cuisine *
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="recipe-cuisine"
+                                    name="cuisine"
+                                    placeholder="Ex : Moroccan, Italian..."
+                                    class="w-full border border-gray-200 rounded-xl px-4 py-3.5 text-sm"
+                                >
+
+                                <p id="cuisine-error" class="text-red-500 text-xs mt-2"></p>
+                            </div>
+
+
+                            <!-- Difficulty and Time -->
+                            <div class="grid sm:grid-cols-2 gap-5 mb-5">
+
+                                <div>
+                                    <label for="recipe-difficulty" class="block text-sm font-bold mb-2">
+                                        Difficulté *
+                                    </label>
+
+                                    <select
+                                        id="recipe-difficulty"
+                                        name="difficulty"
+                                        class="w-full border border-gray-200 rounded-xl px-4 py-3.5 text-sm bg-white"
+                                    >
+                                        <option value="">Choisir</option>
+                                        <option value="Easy">Facile</option>
+                                        <option value="Medium">Moyenne</option>
+                                        <option value="Hard">Difficile</option>
+                                    </select>
+
+                                    <p id="difficulty-error" class="text-red-500 text-xs mt-2"></p>
+                                </div>
+
+                                <div>
+                                    <label for="recipe-time" class="block text-sm font-bold mb-2">
+                                        Temps (minutes) *
+                                    </label>
+
+                                    <input
+                                        type="number"
+                                        id="recipe-time"
+                                        name="prepTimeMinutes"
+                                        min="1"
+                                        max="300"
+                                        placeholder="Ex : 30"
+                                        class="w-full border border-gray-200 rounded-xl px-4 py-3.5 text-sm"
+                                    >
+
+                                    <p id="time-error" class="text-red-500 text-xs mt-2"></p>
+                                </div>
+
+                            </div>
+
+
+                            <!-- Submit -->
+                            <button
+                                type="submit"
+                                id="submit-btn"
+                                class="w-full bg-primary hover:bg-[#254833] text-white py-4 rounded-xl font-bold text-sm transition flex items-center justify-center gap-2">
+
+                                <span>+</span>
+                                Proposer ma recette
+
+                            </button>
+
+                            <!-- Success Message -->
+                            <p id="success-message"
+                               class="hidden text-green-700 bg-green-50 rounded-xl p-4 text-sm font-semibold mt-4">
+                            </p>
+
+                            <!-- Form Error -->
+                            <p id="form-error"
+                               class="hidden text-red-600 bg-red-50 rounded-xl p-4 text-sm mt-4">
+                            </p>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= CTA ================= -->
+        <section class="px-5 lg:px-8 pb-20">
+
+            <div class="max-w-7xl mx-auto bg-primary rounded-[30px] px-8 py-12 sm:p-16 text-center relative overflow-hidden">
+
+                <div class="absolute -top-20 -right-20 w-64 h-64 border border-white/10 rounded-full"></div>
+                <div class="absolute -bottom-32 -left-16 w-80 h-80 border border-white/10 rounded-full"></div>
+
+                <div class="relative z-10">
+                    <p class="text-secondary font-bold tracking-[3px] text-xs uppercase mb-4">
+                        CLUB CUISINE · YOUCODE
+                    </p>
+
+                    <h2 class="font-display text-3xl sm:text-5xl font-bold text-white max-w-2xl mx-auto leading-tight">
+                        Une bonne recette est encore meilleure quand elle est partagée.
+                    </h2>
+
+                    <a href="#ajouter"
+                       class="inline-block mt-8 bg-secondary hover:bg-[#D9873F] text-white px-8 py-4 rounded-full font-bold text-sm transition">
+                        Partager une recette →
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="bg-white border-t border-gray-100">
+
+        <div class="max-w-7xl mx-auto px-5 lg:px-8 py-9">
+
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-5">
+
+                <a href="#" class="flex items-center gap-3">
+                    <div class="w-9 h-9 bg-primary rounded-xl flex items-center justify-center text-lg">
+                        🍃
+                    </div>
+
+                    <div>
+                        <p class="font-display font-bold text-primary">
+                            Axios. En Cuisine
+                        </p>
+                        <p class="text-[10px] text-muted tracking-wider">
+                            LE CARNET DU CLUB CUISINE
+                        </p>
+                    </div>
+                </a>
+
+                <p class="text-xs text-muted text-center">
+                    © 2026 Axios en Cuisine. Projet pédagogique YouCode.
+                </p>
+
+                <a href="#accueil" class="text-sm font-bold text-primary hover:underline">
+                    Retour en haut ↑
+                </a>
+
+            </div>
+
+        </div>
+    </footer>
+<script type="module" src="./js/main.js"></script>
+</body>
+</html>
