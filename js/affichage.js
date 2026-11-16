@@ -1,8 +1,9 @@
 const container = document.getElementById("recipes-container")
+const nombrerecipe = document.getElementById("recipe-count")
 
 export function afficherRecettes(recettes){
+    nombrerecipe.textContent = recettes.length
     const cartes = recettes.map(function(recette){
-        
 return `
     <div class="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
         <img
