@@ -1,8 +1,17 @@
 const container = document.getElementById("recipes-container")
 const nombrerecipe = document.getElementById("recipe-count")
+const emptystate = document.getElementById("empty-state")
 
 export function afficherRecettes(recettes){
     nombrerecipe.textContent = recettes.length
+    if(recettes.length === 0){
+        emptystate.classList.remove("hidden") 
+        container.classList.add("hidden")
+        return
+    }
+    emptystate.classList.add("hidden");
+    container.classList.remove("hidden");
+    
     const cartes = recettes.map(function(recette){
 return `
     <div class="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
