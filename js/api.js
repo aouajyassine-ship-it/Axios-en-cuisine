@@ -12,9 +12,19 @@ export async function getRecipes() {
         params: {
             limit: 12
         }
-    });
+    })
 
-    return response.data;
+    return response.data
 }
-export default api;
+export default api
+
+export async function searchRecipes(motCle) {
+   const search = await api.get("/recipes/search",{
+        params:{
+            q:motCle
+        }
+    })
+    return search.data
+    
+}
 
