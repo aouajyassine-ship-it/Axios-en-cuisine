@@ -1,6 +1,5 @@
-import { getRecipes } from "./api.js";
+import api, { getRecipes, searchRecipes } from "./api.js";
 import { afficherRecettes } from "./affichage.js";
-import {searchRecipes} from "./api.js"
 import { validerRecette } from "./validation.js";
 
 async function chargerRecettes() {
@@ -30,7 +29,7 @@ showAllBtn.addEventListener("click", function() {
 
 const form = document.getElementById("recipe-form")
 
-form.addEventListener("submit", function(event) {
+form.addEventListener("submit", async function(event) {
     event.preventDefault()
     const nom = document.getElementById("recipe-name").value
     const cuisine = document.getElementById("recipe-cuisine").value
@@ -46,5 +45,15 @@ form.addEventListener("submit", function(event) {
     if (Object.keys(erreurs).length > 0) {
         return
     }
-    console.log("Formulaire valide !")
+    try {
+    const response = await api.post("/recipes/add", {
+        name: nom,
+        cuisine: cuisine,
+        difficulty: difficulte,
+        prepTimeMinutes: Number(temps)
+    })
+    console.log("Recette ajoutée :", response.data)
+    } catch (error) {
+    console.log("Erreur :", error)
+}
 })
