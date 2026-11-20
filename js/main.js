@@ -1,5 +1,5 @@
 import api, { getRecipes, searchRecipes } from "./api.js";
-import { afficherRecettes } from "./affichage.js";
+import { afficherRecettes, ajouterRecetteEnPremier } from "./affichage.js";
 import { validerRecette } from "./validation.js";
 
 async function chargerRecettes() {
@@ -10,6 +10,7 @@ chargerRecettes();
 
 const searchbar = document.getElementById("search-input")
 const buttonsearch = document.getElementById("search-btn")
+const submitBtn = document.getElementById("submit-btn");
 
 buttonsearch.addEventListener("click", async function(){
     if (searchbar.value.trim() === "") {
@@ -45,15 +46,24 @@ form.addEventListener("submit", async function(event) {
     if (Object.keys(erreurs).length > 0) {
         return
     }
-    try {
+    submitBtn.disabled = true;
+
+try {
     const response = await api.post("/recipes/add", {
         name: nom,
         cuisine: cuisine,
         difficulty: difficulte,
         prepTimeMinutes: Number(temps)
-    })
-    console.log("Recette ajoutée :", response.data)
-    } catch (error) {
-    console.log("Erreur :", error)
+    });
+
+    ajouterRecetteEnPremier(response.data);
+    const successMessage = document.getElementById("success-message");
+    successMessage.textContent = "Recette ajoutée avec succès !";
+    successMessage.classList.remove("hidden");
+} catch (error) {
+    console.log("Erreur :", error);
+
+} finally {
+    submitBtn.disabled = false;
 }
 })
