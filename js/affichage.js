@@ -5,7 +5,7 @@ const emptystate = document.getElementById("empty-state");
 
 function creerCarte(recette) {
     return `
-        <div class="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+           <div data-id="${recette.id}" class="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
             ${recette.image ? `
                 <img
                     src="${recette.image}"
@@ -26,6 +26,7 @@ function creerCarte(recette) {
                 <p class="text-sm text-[#858C82]">
                     ⏱ Préparation : ${recette.prepTimeMinutes} minutes
                 </p>
+                <button class="btn-supprimer bg-red-500 text-white px-4 py-2 rounded-lg mt-4">Supprimer</button>
             </div>
         </div>
     `;
@@ -49,7 +50,7 @@ export function afficherRecettes(recettes) {
 
 export function ajouterRecetteEnPremier(recette) {
     const carte = creerCarte(recette);
-    
+
     container.insertAdjacentHTML("afterbegin", carte);
 
     nombrerecipe.textContent = Number(nombrerecipe.textContent) + 1;

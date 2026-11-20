@@ -26,7 +26,39 @@ const showAllBtn = document.getElementById("show-all-btn");
 showAllBtn.addEventListener("click", function() {
     chargerRecettes();
 })
+const recipesContainer = document.getElementById("recipes-container");
 
+recipesContainer.addEventListener("click", async function(event) {
+
+    if (event.target.classList.contains("btn-supprimer")) {
+        const carte = event.target.closest("[data-id]");
+        if (!carte) {
+       return;
+}
+      const id = carte.dataset.id;
+        const confirmation = confirm("Voulez-vous vraiment supprimer cette recette ?");
+        if (!confirmation) {
+            return;
+        }
+
+        try {
+            await api.delete(`/recipes/${id}`);
+            carte.remove();
+            if (recipesContainer.children.length === 0) {
+            document.getElementById("empty-state").classList.remove("hidden");
+            recipesContainer.classList.add("hidden");
+}
+            const recipeCount = document.getElementById("recipe-count");
+            recipeCount.textContent = Number(recipeCount.textContent) - 1;
+            const successMessage = document.getElementById("success-message");
+            successMessage.textContent = "Recette supprimée avec succès !";
+            successMessage.classList.remove("hidden");
+
+        } catch (error) {
+            console.log("Erreur :", error);
+        }
+    }
+});
 
 const form = document.getElementById("recipe-form")
 
