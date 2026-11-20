@@ -265,7 +265,7 @@ Lorsque tous les champs sont valides, `main.js` affiche uniquement `Formulaire v
 
 **Prénom Nom**
 
-- GitHub : [@votre-pseudo](https://github.com/votre-pseudo)
-- LinkedIn : [Votre profil](https://www.linkedin.com/in/votre-profil/)
+- GitHub : [@aouajyassine-ship-it](https://github.com/aouajyassine-ship-it)
+- LinkedIn : [yassine-aouaj](https://www.linkedin.com/in/yassine-aouaj-74330b372//)
 
 Projet pédagogique réalisé dans le cadre de la formation **YouCode**.
