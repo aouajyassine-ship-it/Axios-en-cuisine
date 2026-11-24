@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -34,6 +35,11 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Verify build output
+        run: |
+          test -f dist/index.html
+          grep -q 'src="/Axios-en-cuisine/assets/' dist/index.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
