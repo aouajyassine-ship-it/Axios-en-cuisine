@@ -1,30 +1,31 @@
-
 import axios from "axios";
-// Création d'une instance Axios
+
+// Création d'une seule instance Axios pour tout le projet
 const api = axios.create({
     baseURL: "https://dummyjson.com",
     timeout: 10000
 });
-console.log(api)
+
 // Récupérer les 12 premières recettes
 export async function getRecipes() {
     const response = await api.get("/recipes", {
         params: {
             limit: 12
         }
-    })
+    });
 
-    return response.data
+    return response.data;
 }
-export default api
 
+// Rechercher des recettes avec un mot-clé
 export async function searchRecipes(motCle) {
-   const search = await api.get("/recipes/search",{
-        params:{
-            q:motCle
+    const response = await api.get("/recipes/search", {
+        params: {
+            q: motCle
         }
-    })
-    return search.data
-    
+    });
+
+    return response.data;
 }
 
+export default api;
